@@ -19,7 +19,7 @@ NTAPI
 RtlCompleteProcessCloning(_In_ BOOL bCloned);
 ```
 
-with it we easy can implement RtlCloneUserProcess with NtCreateUserProcess
+with it we easy can implement `RtlCloneUserProcess` with `NtCreateUserProcess`
 
 ```
 NTSTATUS status = ProcessFlags & RTL_CLONE_PROCESS_FLAGS_NO_SYNCHRONIZE 
