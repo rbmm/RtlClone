@@ -5,7 +5,7 @@ from [The Definitive Guide To Process Cloning on Windows](https://github.com/hun
 >So, why is `RtlCloneUserProcess` useful when we already have the more flexible `NtCreateUserProcess` ? 
 >The reason might be surprising: we cannot re-implement its functionality, at least not entirely and precisely.
 
-this is not true. ntdll.dll (native, not wow) exported next 2 functions:
+this is not true. ntdll.dll (x64, but not x86, not check on arm64) exported next 2 functions:
 
 ```
 NTSYSAPI
