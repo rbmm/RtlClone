@@ -20,7 +20,7 @@ RtlCompleteProcessCloning(_In_ BOOL bCloned);
 
 with it we easy can implement RtlCloneUserProcess with NtCreateUserProcess
 
-``
+```
 	NTSTATUS status = ProcessFlags & RTL_CLONE_PROCESS_FLAGS_NO_SYNCHRONIZE ? STATUS_SUCCESS : RtlPrepareForProcessCloning();
 
 	if (0 <= status)
@@ -41,6 +41,7 @@ probably it doesn't matter more, but it seems these api ( RtlPrepareForProcessCl
 
 in src code several example of how cloned process can interact with parent - via inherited Event handle, thread Alert, Apc, etc
 also i show here again how we can map/unmap executable image section from cloned process to parent process. this is very strong anti-debug technique, most debuggers freeze both processes here forever. some debuggers silently, windbg with next messages:
+
 ```
       // ERROR: Unable to find system process ****
       // ERROR: The process being debugged has either exited or cannot be accessed
