@@ -2,7 +2,7 @@
 
 from [The Definitive Guide To Process Cloning on Windows](https://github.com/huntandhackett/process-cloning/tree/master?tab=readme-ov-file#the-definitive-guide-to-process-cloning-on-windows)
  
->So, why is RtlCloneUserProcess useful when we already have the more flexible NtCreateUserProcess? 
+>So, why is `RtlCloneUserProcess` useful when we already have the more flexible `NtCreateUserProcess` ? 
 >The reason might be surprising: we cannot re-implement its functionality, at least not entirely and precisely.
 
 this is not true. ntdll.dll (native, not wow) exported next 2 functions:
@@ -22,18 +22,20 @@ RtlCompleteProcessCloning(_In_ BOOL bCloned);
 with it we easy can implement RtlCloneUserProcess with NtCreateUserProcess
 
 ```
-	NTSTATUS status = ProcessFlags & RTL_CLONE_PROCESS_FLAGS_NO_SYNCHRONIZE ? STATUS_SUCCESS : RtlPrepareForProcessCloning();
+NTSTATUS status = ProcessFlags & RTL_CLONE_PROCESS_FLAGS_NO_SYNCHRONIZE 
+	? STATUS_SUCCESS : RtlPrepareForProcessCloning();
 
-	if (0 <= status)
-	{
-		PS_CREATE_INFO createInfo = { sizeof(createInfo) };
+if (0 <= status)
+{
+	PS_CREATE_INFO createInfo = { sizeof(createInfo) };
 
-		status = NtCreateUserProcess(...);
+	status = NtCreateUserProcess(...);
 
-		if (ProcessFlags & RTL_CLONE_PROCESS_FLAGS_NO_SYNCHRONIZE) RtlCompleteProcessCloning(STATUS_PROCESS_CLONED == status);
-	}
+	if (ProcessFlags & RTL_CLONE_PROCESS_FLAGS_NO_SYNCHRONIZE) 
+		RtlCompleteProcessCloning(STATUS_PROCESS_CLONED == status);
+}
 
-	return status;
+return status;
 ```
 
 such implementation we can view in wow64.dll inside Wow64NtCreateUserProcess function
