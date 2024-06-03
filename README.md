@@ -2,7 +2,8 @@
 
 from [The Definitive Guide To Process Cloning on Windows](https://github.com/huntandhackett/process-cloning/tree/master?tab=readme-ov-file#the-definitive-guide-to-process-cloning-on-windows)
  
-So, why is RtlCloneUserProcess useful when we already have the more flexible NtCreateUserProcess? The reason might be surprising: we cannot re-implement its functionality, at least not entirely and precisely.
+>So, why is RtlCloneUserProcess useful when we already have the more flexible NtCreateUserProcess? 
+>The reason might be surprising: we cannot re-implement its functionality, at least not entirely and precisely.
 
 this is not true. ntdll.dll (native, not wow) exported next 2 functions:
 
@@ -51,5 +52,5 @@ also i show here again how we can map/unmap executable image section from cloned
 also this is work in x64 processes. but in x86 not exist RtlPrepareForProcessCloning/RtlCompleteProcessCloning
 
 in case we in wow64 (x86 process on x64 system) NtCreateUserProcess internal call Wow64NtCreateUserProcess function inside wow64.dll
-and it already call RtlPrepareForProcessCloning();NtCreateUserProcess(...);RtlCompleteProcessCloning(STATUS_PROCESS_CLONED == status); ( if RTL_CLONE_PROCESS_FLAGS_NO_SYNCHRONIZE not set )
-despite new cloned wow64 process created - it crashed just after enter to 32-bit mode. more exactly - after first access FS segment. in x86 windows FS segment must point to thread TEB, but by error in cloning code - FS point to 0 in cloned process
+and it already call `RtlPrepareForProcessCloning();NtCreateUserProcess(...);RtlCompleteProcessCloning(STATUS_PROCESS_CLONED == status);` ( if `RTL_CLONE_PROCESS_FLAGS_NO_SYNCHRONIZE` not set )
+despite new cloned wow64 process created - it crashed just after enter to 32-bit mode. more exactly - after first access **`FS`** segment. in x86 windows **`FS`** segment must point to thread *TEB*, but by error in cloning code - **`FS`** point to 0 in cloned process
